@@ -12,3 +12,19 @@ meta_data7.csv - this is unique list of IMDB_IDs from the character_list file, w
 
 The selected scripts and their sources are also publicly maintained here: https://docs.google.com/spreadsheets/d/1fbcldxxyRvHjDaaY0EeQnQzvSP7Ub8QYVM2bIs-tKH8/edit#gid=1668340193
 
+To parse the line data in meta_data7.csv: we assume that a minute of dialogue is roughly 14 lines (using average speaking pace 140 words/min. and average words per line of about 10).
+
+So each numeral in the string is the number of MALE lines for half a minute. So if split up the string into groups of two and add the two the numerals, we have total number of male lines of roughly a minute of time.
+
+Here's the js code from the article that we use to parse that string:
+
+        var lineInfo = data.lines_data.match(/.{1,2}/g);
+
+        for (line in lineInfo){
+          var minuteTotal = +lineInfo[line].slice(0,1) + +lineInfo[line].slice(1,2);
+          var row = [minuteTotal,14-minuteTotal];
+          lineData.push(row);
+        }
+
+Each row is an array of [male lines out of 14 representing one minute, female lines out of 14 representing one minute]
+
